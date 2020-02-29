@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  serverless architecture
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Runtime: ruby2.7
+    Timeout: 5
+    Handler: lambda.lambda_handler
+    Layers:
+      - Ref: ModelLayer
+      - Ref: BundleLayer
+    Environment:
+      Variables:
+        # list your global environment variables
+
+Resources:
+  ModelLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: ModelsORM
+      Description: ORM models
+      ContentUri: layers/models_layer/models_layer.zip
+      CompatibleRuntimes:
+        - ruby2.7
+
+  BundleLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: BundleLayer
+      Description: dependencies (gems)
+      ContentUri: layers/bundle_layer/bundle_layer.zip
+      CompatibleRuntimes:
+        - ruby2.7
+
+  GetExamplesFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: functions/get_examples/
+      Events:
+        HttpApiEvent:
+          Type: HttpApi
+          Properties:
+            Path: /example
+            Method: GET

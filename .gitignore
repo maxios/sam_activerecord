@@ -1,0 +1,9 @@
+vendor/*
+.bundle/
+.aws-sam/
+samconfig.toml
+
+layers/bundle_layer/ruby
+layers/models_layer/ruby
+
+*.zip

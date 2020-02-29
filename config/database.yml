@@ -1,0 +1,10 @@
+default: &default
+  adapter: postgresql
+
+development:
+  <<: *default
+  database: sam_activerecord_development
+
+production:
+  <<: *default
+  database: sam_activerecord_production
